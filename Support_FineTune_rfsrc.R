@@ -80,6 +80,7 @@ for (i in 1:nrow(tuneGrid)) {
     best_rf_model <- rf_model
   }
 }
+best_params
 
 
 
