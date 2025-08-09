@@ -17,10 +17,8 @@ library(randomForestSRC)
 library(randomForestSRC)
 library(caret)
 library(fastDummies)
-#use_condaenv("C:/Users/mde4023/AppData/Local/anaconda3/envs/r-tf", required = TRUE)
 #install.packages("hdf5r")
 library(hdf5r)
-#file <- H5File$new("C:/Users/mde4023/Downloads/StackedSurvivalData/SUPPORT/support_train_test.h5", mode = "r")
 file <- H5File$new("C:/Users/mde4023/Documents/GitHub/StackedSurvivalData/SUPPORT/support_train_test.h5", mode = "r")
 # List available groups and datasets
 file$ls(recursive = TRUE)
@@ -106,3 +104,4 @@ for (i in 1:nrow(tuneGrid)) {
     best_rf_model <- rf_model
   }
 }
+
