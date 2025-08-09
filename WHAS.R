@@ -76,11 +76,6 @@ CreateStack=function(trainData,nrep,myseed){
 }
 seed_R=123
 set_seed(seed_R, seed_np = seed_R, seed_torch = seed_R)
-mod=deepsurv(data=train_df,
-         time_variable = "time",
-         status_variable = "event")
-mod1 <- predict(mod, type="risk",newdata = test_df)
-UnoC(test_df$time,test_df$event,mod1)
 
 mod=deepsurv(data=train_df,
          time_variable = "time",
@@ -248,3 +243,4 @@ simFunctionRF<-function(seedNum,nrep){
 round(simFunctionRF(123,10),3)
 
 #[1] 123.000   0.876   0.907   0.909   0.886   0.884
+
