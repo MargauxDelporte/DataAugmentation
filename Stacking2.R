@@ -99,8 +99,8 @@ mod=deepsurv(data=train_df,
          batch_norm = F,
          batch_size=250L,
          shuffle=TRUE)
-?deepsurv
-#analysis
+
+#Parameters based on the deepsurv paper
 #{"learning_rate": 0.023094096518941305, "dropout": 0.017243652343750002, "lr_decay": 0.0009819482421875,
 #"momentum": 0.926554443359375, "L2_reg": 2.364680908203125, "batch_norm": false,
 #"standardize": true, "n_in": 6, "hidden_layers_sizes": [26, 26, 26], "activation": "selu"}
@@ -216,17 +216,9 @@ simFunction<-function(seedNum,nrep){
 
 
 round(simFunction(123,10),3)
-sum/test_df$event
 #[1]  123.0000000   0.8373587   0.8577635   0.8527725   0.8604064   0.8460137   0.8252750
 
-
-
-
-
-
-
-##################try a random forest#########################
-seedNum
+##################Include a survival forest#########################
 simFunctionRF<-function(seedNum,nrep){
   DataSeg_n=CreateStack(train_df,nrep =nrep,myseed=seedNum)
   DataSeg_1=CreateStack(train_df,nrep =1,myseed=seedNum)
@@ -254,4 +246,5 @@ simFunctionRF<-function(seedNum,nrep){
   return(c(seedNum,dnnC1,dnnC2,dnnC3,dnnC4,dnnC5))
 }
 round(simFunctionRF(123,10),3)
+
 #[1] 123.000   0.876   0.907   0.909   0.886   0.884
