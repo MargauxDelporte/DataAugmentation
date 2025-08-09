@@ -113,5 +113,3 @@ simFunctionRF<-function(seedNum,nrep){
 }
 round(simFunctionRF(777,10),3)
 #[1] 777.000   0.637   0.664   0.640   0.638   0.617
-round(simFunctionRF(123,10),3)
-#
