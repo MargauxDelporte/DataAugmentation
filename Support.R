@@ -69,32 +69,8 @@ CreateStack=function(trainData,nrep,myseed){
   ))
 }
 seed_R=123
-set_seed(seed_R, seed_np = seed_R, seed_torch = seed_R)
-mod=deepsurv(data=train_df,
-             time_variable = "time",
-             status_variable = "event")
-mod1 <- predict(mod, type="risk",newdata = test_df)
-UnoC(test_df$time,test_df$event,mod1)
 
-mod=deepsurv(data=train_df,
-             time_variable = "time",
-             status_variable = "event",
-             learning_rate=0.023094096518941305,
-             lr_decay= 0.0009819482421875,
-             momentum=0.92655444335937,
-             #l2_regularization_strength= 2.364680908203125,
-             frac=0.5,    
-             activation="selu",    
-             num_nodes=c(26, 26, 26), 
-             dropout=.017243652343750002,          
-             early_stopping=TRUE, 
-             epochs=1000L,
-             patience=50L,
-             batch_norm = F,
-             batch_size=250L,
-             shuffle=TRUE)
-?deepsurv
-#analysis
+#analysis based on the parameters from the deepsurv paper
 #{"learning_rate": 0.023094096518941305, "dropout": 0.017243652343750002, "lr_decay": 0.0009819482421875,
 #"momentum": 0.926554443359375, "L2_reg": 2.364680908203125, "batch_norm": false,
 #"standardize": true, "n_in": 6, "hidden_layers_sizes": [26, 26, 26], "activation": "selu"}
@@ -214,7 +190,7 @@ sum/test_df$event
 #[1]  123.0000000   0.8373587   0.8577635   0.8527725   0.8604064   0.8460137   0.8252750
 
 
-##################try a random forest#########################
+##################fit random forest#########################
 seedNum=123
 nrep=10
 simFunctionRF<-function(seedNum,nrep){
@@ -251,5 +227,3 @@ simFunctionRF<-function(seedNum,nrep){
   return(c(seedNum,dnnC1,dnnC2,dnnC3,dnnC4,dnnC5))
 }
 round(simFunctionRF(123,10),3)
-round(simFunctionRF(123,1),3)
-
