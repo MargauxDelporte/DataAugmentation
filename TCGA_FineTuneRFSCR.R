@@ -1,14 +1,10 @@
 library(correctedC)
 library(survminer)
 library(dplyr)
-library(tableone)
-library(reticulate)
 library(survivalmodels)
 library(survival)
 library(devtools)
-library(survivalContour)
 library(randomForestSRC)
-library(fastDummies)
 library(readr)
 #source('C:/Users/mde4023/downloads/StackedSurvivalData/TCGA/CreateData.R')
 setwd('C:/Users/mde4023/Downloads/StackedSurvivalData/TCGA')
@@ -55,3 +51,4 @@ for (i in seq_len(nrow(tune_grid))) {
   ))
 }
 results[which(results$cindex==max(results$cindex)),]
+
