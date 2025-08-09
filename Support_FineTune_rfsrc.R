@@ -57,6 +57,7 @@ best_params <- NULL
 best_rf_model <- NULL
 # Fit the best model on the full training data i=1
 for (i in 1:nrow(tuneGrid)) {
+  set.seed(123)
   # Get current hyperparameter combination
   current_params <- tuneGrid[i,]
   ntree <- current_params$ntree
@@ -81,6 +82,7 @@ for (i in 1:nrow(tuneGrid)) {
   }
 }
 best_params
+
 
 
 
