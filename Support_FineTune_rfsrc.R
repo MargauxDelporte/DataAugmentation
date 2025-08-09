@@ -14,8 +14,6 @@ library(intsurv)
 library(survival)
 library(devtools)
 library(randomForestSRC)
-library(randomForestSRC)
-library(caret)
 library(fastDummies)
 #install.packages("hdf5r")
 library(hdf5r)
@@ -59,22 +57,6 @@ tuneGrid <- expand.grid(
   maxnodes = c(10, 20, 30)         # Maximum number of terminal nodes
 )
 
-# Train the model using cross-validation with caret
-ctrl <- trainControl(method = "cv", number = 5, summaryFunction = twoClassSummary, 
-                     classProbs = TRUE, verboseIter = TRUE)
-
-rf_model <- train(
-  myformula, 
-  data = train_df, 
-  method = "rfsrc", 
-  trControl = ctrl, 
-  tuneGrid = tuneGrid, 
-  metric = "ROC"  # We maximize the ROC AUC (which is related to C-index)
-)
-
-# Print the best hyperparameters
-print(rf_model$bestTune)
-
 # Initialize variables to store best results
 best_cindex <- 0
 best_params <- NULL
@@ -104,4 +86,5 @@ for (i in 1:nrow(tuneGrid)) {
     best_rf_model <- rf_model
   }
 }
+
 
