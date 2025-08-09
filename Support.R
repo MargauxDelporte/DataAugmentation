@@ -1,7 +1,5 @@
 # Load the packages
 library(survival)   # For survival analysis functions
-library(ggplot2)    # For plotting
-library(ggfortify)  # For autoplotting survival curves
 library(correctedC)
 library(survminer)
 library(dplyr)
@@ -12,7 +10,6 @@ library(intsurv)
 library(survival)
 library(devtools)
 library(keras)
-#library(survivalContour)
 library(fastDummies)
 #use_condaenv("C:/Users/mde4023/AppData/Local/anaconda3/envs/r-tf", required = TRUE)
 #install.packages("hdf5r")
@@ -255,3 +252,4 @@ simFunctionRF<-function(seedNum,nrep){
 }
 round(simFunctionRF(123,10),3)
 round(simFunctionRF(123,1),3)
+
