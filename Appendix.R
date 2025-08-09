@@ -240,6 +240,5 @@ for(i in seq(from=0.2,to=1,by=0.1)){
   result=rbind(result,round(simFunctionRF(123,10,i),3))
 }
 result2=cbind(result,as.vector(result[,4]-result[,2]))
-library(stargazer)
-stargazer(as.matrix(result2))
-0.909-0.876
+result2
+
