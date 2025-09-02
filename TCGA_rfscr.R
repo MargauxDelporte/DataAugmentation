@@ -49,50 +49,40 @@ simFunctionRF<-function(seedNum,nrep){
     formula = Surv(time, status) ~ .,
     data = DataSeg_n$trainData,
     ntree = 500,
-    mtry = 10,
-    nodesize = 10,
-    block.size = 1,  # prevents full data in memory
-    importance = "none",
+    mtry = 30,
+    nodesize = 20,
     forest = TRUE
   )
   rfModel2 <- rfsrc(
     formula = Surv(time, status) ~ .,
     data = DataSeg_n$replicated_df,
     ntree = 500,
-    mtry = 10,
-    nodesize = 10,
-    block.size = 1,  # prevents full data in memory
-    importance = "none",
+    mtry = 30,
+    nodesize = 20,
     forest = TRUE
   )
   rfModel3 <- rfsrc(
     formula = Surv(time, status) ~ .,
     data = DataSeg_n$stacked_df,
     ntree = 500,
-    mtry = 10,
-    nodesize = 10,
-    block.size = 1,  # prevents full data in memory
-    importance = "none",
+    mtry = 30,
+    nodesize = 20,
     forest = TRUE
   )
   rfModel4 <- rfsrc(
     formula = Surv(time, status) ~ .,
     data = DataSeg_1$replicated_df,
     ntree = 500,
-    mtry = 10,
-    nodesize = 10,
-    block.size = 1,  # prevents full data in memory
-    importance = "none",
+    mtry = 30,
+    nodesize = 20,
     forest = TRUE
   )
   rfModel5 <- rfsrc(
     formula = Surv(time, status) ~ .,
     data = DataSeg_1$stacked_df,
     ntree = 500,
-    mtry = 10,
-    nodesize = 10,
-    block.size = 1,  # prevents full data in memory
-    importance = "none",
+    mtry = 30,
+    nodesize = 20,
     forest = TRUE
   )
 
@@ -109,7 +99,59 @@ simFunctionRF<-function(seedNum,nrep){
   dnnC5<-UnoC(test_df$time,test_df$status,rfPred5$predicted)
   
   r=c(seedNum,dnnC1,dnnC2,dnnC3,dnnC4,dnnC5)
+  write.csv(t(r),file=paste0('C:/Users/mde4023/Downloads/StackedSurvivalData/TCGA/ResultRF/NN_',seedNum,'.csv'))
   return(c(seedNum,dnnC1,dnnC2,dnnC3,dnnC4,dnnC5))
 }
 round(simFunctionRF(777,10),3)
-#[1] 777.000   0.637   0.664   0.640   0.638   0.617
+#[1] 777.000   0.623   0.643   0.625   0.643   0.664
+# Set up parallel plan
+library(future.apply)
+library(reticulate)
+ncores <- 25
+plan(multisession, workers = 25)
+
+
+# Wrap simFunction to ensure Python env is initialized in each worker
+simFunction_parallel <- function(seedNum, nrep) {
+  simFunctionRF(seedNum = seedNum, nrep = 5)
+}
+
+# Seeds to run
+seeds <- 1:999
+nrep <- 5
+
+# Run in parallel with reproducible RNG
+results_matrix <- future_sapply(seeds, function(s) {
+  simFunction_parallel(seedNum = s, nrep = nrep)
+}, future.seed = TRUE)
+
+# Reset future plan
+plan(sequential)
+
+##check if everything is fitted and calculate result
+# Directory path
+path <- "C:/Users/mde4023/Downloads/StackedSurvivalData/TCGA/ResultRF/"
+
+# List all files
+files <- list.files(path, full.names = FALSE)
+
+# Extract the numeric part after "NN_"
+nums <- as.numeric(sub(".*NN_([0-9]+).*", "\\1", files))
+
+# Combine file names with extracted numbers
+result <- data.frame(file = files, value = nums)
+
+todo=setdiff(1:999,result$value)
+todo
+# Read and rbind all files
+files <- list.files(path, full.names = TRUE)
+all_data <- lapply(files, read.csv) %>% bind_rows()
+
+# If you want to keep track of which file each row came from
+all_data <- lapply(files, function(f) {
+  df <- read.csv(f)
+  df$file_source <- basename(f)
+  df
+}) %>% bind_rows()
+head(all_data)
+round(colMeans(all_data[,3:7]),3)
